@@ -13,3 +13,9 @@ fingerprint_ignore_patterns: []
 dependencies: {}
 api_spec: open_api3_spec.yaml
 frontend_dir: build
+behaviours:
+-   class_name: LogReadingBehaviour
+    args: {}
+handlers:
+-  class_name: UserInterfaceHttpHandler
+   args: {}

@@ -26,6 +26,7 @@ connections: []
 contracts: []
 protocols:
 - eightballer/http:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
+- eightballer/websockets:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
 behaviours:
@@ -45,6 +46,9 @@ handlers:
   user_interface_http:
     args: {}
     class_name: UserInterfaceHttpHandler
+  user_interface_ws:
+    args: {}
+    class_name: UserInterfaceWsHandler
   ipfs:
     args: {}
     class_name: IpfsHandler
@@ -74,6 +78,12 @@ models:
   user_interface_http_dialogues:
     args: {}
     class_name: UserInterfaceHttpDialogues
+  user_interface_ws_dialogues:
+    args: {}
+    class_name: UserInterfaceWsDialogues
+  user_interface_client_strategy:
+    args: {}
+    class_name: UserInterfaceClientStrategy
   ipfs_dialogues:
     args: {}
     class_name: IpfsDialogues
@@ -85,6 +95,8 @@ models:
       user_interface:
         enabled: false
         custom_component: null
+        http_enabled: true
+        ws_enabled: true
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
@@ -149,6 +161,8 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
+
+  
 dependencies: {}
 is_abstract: true
 customs: []

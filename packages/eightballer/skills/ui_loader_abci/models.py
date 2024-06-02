@@ -19,7 +19,8 @@
 
 """This module contains the shared state for the abci skill of ComponentLoadingAbciApp."""
 
-from typing import Any
+from aea.skills.base import Model
+from typing import Any, Dict
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -36,6 +37,9 @@ class SharedState(BaseSharedState):
 
     abci_app_cls = ComponentLoadingAbciApp
 
+
+class UserInterfaceClientStrategy(Model):
+    clients: Dict[str, Any] = {}
 
 class UserInterfaceLoaderParams(BaseParams):
     """Keep the current params of the skill."""

@@ -21,42 +21,24 @@ The ABCI frontend loader is designed to not interfer with agent development and 
 The frontend components are defined as `custom_components` and are loaded by the frontend loader.
 
 Please see [Tatha's Trader UI](../packages/tatha/customs/trader_ui)
+Additionally, a simple example of a frontend component is the [eightballer/logging](../packages/eightballer/customs/logging) component.
 
 ### Current Features.
 
 - Generate routes from the `build` directory.
 - enable `API` routes from the `openapi3_spec.yaml` file.
-- ABCI spec with healthcheck for the served frontend.
+- ABCI spec with healthcheck for the served frontend;
+- http support for the frontend.
+- Websockets support for the frontend.
+- Cors headers injected by ABCI handler.
 
-```yaml
-alphabet_in:
-  - DONE
-  - ERROR
+- Background tasks specified and launched by the loader (An anology would be background tasks in a Flask app.)
 
-default_start_state: SetupRound
 
-final_states:
-  - DoneRound
-
-label: ComponentLoadingAbciApp
-
-start_states:
-  - SetupRound
-  - HealthcheckRound
-
-states:
-  - SetupRound
-  - HealthcheckRound
-  - DoneRound
-  - ErrorRound
-
-transition_func:
-  (SetupRound, DONE): HealthcheckRound
-  (SetupRound, ERROR): ErrorRound
-  (HealthcheckRound, DONE): DoneRound
-  (HealthcheckRound, ERROR): ErrorRound
-  (ErrorRound, DONE): SetupRound
-```
+- Examples of frontends in multiple languages.
+-- React
+-- [HTML](../packages/eightballer/customs/simple_html)
+-- [Svelte](../packages/eightballer/customs/logging)
 
 
 - Independant Protocols and servers for the frontend components meaning no interaction with core skills.
@@ -102,9 +84,21 @@ fingerprint_ignore_patterns: []
 dependencies: {}
 api_spec: open_api3_spec.yaml
 frontend_dir: build
+behaviours:
+-   class_name: LogReadingBehaviour
+    args: {}
+handlers:
+-  class_name: UserInterfaceHttpHandler
+   args: {}
+
 ```
 
-Notice the extra fields `api_spec` and `frontend_dir` which are used to define the openapi3 spec and the frontend directory respectively.
+Notice the extra fields:
+    `api_spec`
+    `frontend_dir`
+    `behaviours`
+    `handlers`
+
 
 ### Openapi3 Spec
 The framework uses the openapi3 spec to define the API for the frontend component.
@@ -156,10 +150,10 @@ The openapi3 spec is used to define the API for the frontend component.
 Note: Future extension will include the ability to define `handlers` for the frontend apis.
 
 
-### Build
-The `build` directory contains the compiled frontend code generated from Javascript frameworks like React, Angular, Vue etc.
+### Frontend Directory 
+The `frontend_dir` directory contains the compiled frontend code generated from Javascript frameworks like React, Angular, Vue etc.
 
-For example, the `build` directory for a React app would look like this;
+For example, the `fronent_dir: build` directory for a React app would look like this;
 
 ```bash
 packages/AUTHOR/customs/COMPONENT_NAME
@@ -247,6 +241,138 @@ curl localhost:5555/api/agent-info | jq
 }
 ```
 
+## Real Time Websockets
+
+The disadavantage of the above method is that the frontend has to poll the backend for updates.
+
+This is not efficient and can be improved by using websockets.
+
+The frontend loader ABCI provides a way to emit events from the backend to the frontend.
+
+This is done using `behaviours`.
+
+Messages can also be sent from the frontend to the backend using `handlers`.
+
+### handlers
+
+In order to listen for events from the frontend to the backend, the developers can define a `handler`.
+
+A handler is based on the Open-Aea `handler` class and is defined in a file specified in the `component.yaml` file.
+
+handlers use the `websockets` protocol to communicate between the frontend and the backend.
+
+The combination of `behaviours` and `handlers` allows for real-time communication between the frontend and the backend.
+
+
+An example of a simple ping pong handler is as follows;
+
+```python
+
+"""
+Simple handler funtions for the Ui ABCI loader.
+"""
+import datetime
+
+got_message = datetime.datetime.now().isoformat()
+
+from aea.skills.base import Handler
+
+class PingPongHandler(Handler):
+    def setup(self):
+        """Set up the handler."""
+        pass
+
+    def handle(self, msg):
+        """Handle the data."""
+        response = f"Pong @ {got_message}: {msg.data}"
+        return response
+    
+    def teardown(self):
+        """
+        Implement the handler teardown.
+        """
+
+```
+
+
+A simple use case as demonstrated by the `eightballer/logging` component is an agent hosted frontend that displays the logs of the agent in real-time.
+
+Tt takes advantage of the `behaviours` and `handlers` to provide a real-time log viewer of the agent's logs directly in the browser.
+
+It also allows the user to interact with the agent by sending a ping message to the agent which is then displayed in the logs with a pong response.
+
+### behaviours
+
+In order to emit events from the frontend to the backend, the developers can define an `behaviour`.
+
+An behaviour is a Open-Aea `behaviour` class.
+
+The behaviour is defined in a file specified in the `component.yaml` file.
+
+behaviours use `websockets` to communicate between the frontend and the backend.
+
+An example of an behaviour is as follows;
+
+```python
+
+
+class LogReadingbehaviour(Behaviour):
+    """Reads in the log file and sends the new lines to the client."""
+
+    lines: int = 0
+    client_to_lines: dict = {}
+
+    def setup(self):
+        """
+        Implement the setup.
+        """
+        super().setup()
+        self.lines = 0
+        self.client_to_lines = {}
+        self.log_file = os.environ.get("LOG_FILE", "log.txt")
+
+
+    def send_message(self, data, dialogue):
+        """
+        Send a message to the client.
+        """
+        msg = dialogue.reply(
+            performative=WebsocketsMessage.Performative.SEND,
+            data=data,
+        )
+        self.context.outbox.put_message(message=msg)
+
+    def teardown(self):
+        """
+        Implement the handler teardown.
+        """
+
+    def act(self):
+        """
+        We read in the log file and send the new lines to the client.
+        We do so in an efficent manner, only reading the new lines.
+        we make sure to send a message to all clients currently connected to the ui.
+        # TODO: Add a way to specify the log file.
+        """
+        self.read_log()
+
+    def read_log(self):
+        """Read in each log line."""
+        with open(
+            Path(self.log_file),
+            "r",
+            encoding="utf-8",
+        ) as f:
+            for line in f.readlines()[self.lines :]:
+                self.lines += 1
+                for _, dialogue in self.context.ui_loader_abci.clients.items():
+                    self.send_message(msg, dialogue)
+
+```
+
+This behaviour reads in the log file and sends the new lines to all the clients connected to the websocket
+
+
 
 ## Agent Configuration
 
@@ -273,6 +399,9 @@ models:
 ```
 
 
+
+
+
 ## Roadmap 
 
 There are a number of features that are planned for the frontend loader.
@@ -282,4 +411,9 @@ These will be implemented based on future requirements and feedback from the com
 ### Future Features.
 
 - Extend to allow websockets.
+  -- Specify the behaviour Object.
+  -- Example of a simple websocket connection.
+
+
+
 - Extend to allow custom `handlers` for the frontend apis.

@@ -9,6 +9,7 @@ fingerprint:
   __init__.py: bafybeighcq4pmuzte6vhvvprrvo563vzghkoit2h6qdqxf2ma5bghevkee
 fingerprint_ignore_patterns: []
 connections:
+- eightballer/websocket_server:0.1.0:bafybeib27byea6hwpt2fh2tt4t7jbn34r56hc654r365vipbktecfh4qsy
 - eightballer/http_server:0.1.0:bafybeib27byea6hwpt2fh2tt4t7jbn34r56hc654r365vipbktecfh4qsy
 - eightballer/http_client:0.1.0:bafybeid4cwamevng2ufyflcrerm6xyp5rjby2lbo2ulybqlik44g3aslni
 - valory/abci:0.1.0:bafybeiclexb6cnsog5yjz2qtvqyfnf7x5m7tpp56hblhk3pbocbvgjzhze
@@ -287,3 +288,11 @@ config:
   host: 0.0.0.0
   port: 5555
   target_skill_id: valory/trader_abci:0.1.0
+---
+public_id: eightballer/websocket_server:0.1.0:bafybeib4t4ay6kfjokq3cydparpzs4zllyl2yujvfsbc24xogwyxsswaqy
+type: connection
+config:
+  host: 0.0.0.0
+  port: 5556
+  target_skill_id: valory/trader_abci:0.1.0
+

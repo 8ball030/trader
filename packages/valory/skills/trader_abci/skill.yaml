@@ -48,6 +48,9 @@ handlers:
   user_interface_http:
     args: {}
     class_name: UserInterfaceHttpHandler
+  user_interface_ws:
+    args: {}
+    class_name: UserInterfaceWsHandler
   ipfs:
     args: {}
     class_name: IpfsHandler
@@ -83,6 +86,12 @@ models:
   user_interface_http_dialogues:
     args: {}
     class_name: UserInterfaceHttpDialogues
+  user_interface_ws_dialogues:
+    args: {}
+    class_name: UserInterfaceWsDialogues
+  user_interface_client_strategy:
+    args: {}
+    class_name: UserInterfaceClientStrategy
   params:
     args:
       user_interface:

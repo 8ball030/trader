@@ -68,8 +68,13 @@ from packages.valory.skills.transaction_settlement_abci.rounds import Event as T
 from packages.valory.skills.tx_settlement_multiplexer_abci.models import (
     TxSettlementMultiplexerParams,
 )
-from packages.eightballer.skills.ui_loader_abci.models import UserInterfaceLoaderParams
+from packages.eightballer.skills.ui_loader_abci.models import (
+    UserInterfaceLoaderParams, 
+)
 
+from packages.eightballer.skills.ui_loader_abci.models import UserInterfaceClientStrategy as BaseUserInterfaceClientStrategy
+
+UserInterfaceClientStrategy = BaseUserInterfaceClientStrategy
 
 EventType = Union[
     Type[MarketManagerEvent],

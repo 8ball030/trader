@@ -22,7 +22,11 @@
 from abc import ABC
 from glob import glob
 from pathlib import Path
-from typing import Generator, Set, Type, cast
+import threading
+import time
+import yaml
+from typing import Generator, Optional, Set, Type, cast
+from importlib import import_module
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
 from packages.valory.skills.abstract_round_abci.behaviours import (
@@ -30,7 +34,7 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     BaseBehaviour,
 )
 
-from packages.eightballer.skills.ui_loader_abci.models import Params
+from packages.eightballer.skills.ui_loader_abci.models import Params, UserInterfaceClientStrategy
 from packages.eightballer.skills.ui_loader_abci.rounds import (
     Event,
     SynchronizedData,
@@ -143,6 +147,13 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
 
     matching_round: Type[AbstractRound] = SetupRound
 
+    @property
+    def strategy(self) -> Optional[str]:
+        """Get the strategy."""
+        return cast(UserInterfaceClientStrategy, self.context.user_interface_client_strategy)
+
+
+
     # TODO: implement logic required to set payload content for synchronization
     def async_act(self) -> Generator:
         """Do the act, supporting asynchronous execution."""
@@ -152,11 +163,28 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
 
             ui_setup_ok = Event.DONE
             if self.params.user_interface_enabled:
-                ui_name = self.params.user_interface_name
-                self.context.logger.info(f"Loading User Interface: {ui_name}")
-                ui_setup_ok = yield from self.load_ui()
+                author, component_name, directory, config = self.custom_ui_component
+                self.context.logger.info(f"Loading User Interface: {component_name}")
+                ui_setup_ok = yield from self.load_ui(directory)
+                if config.get("behaviours", False):
+                    ui_behaviours_ok = yield from self.load_behaviours(author, component_name, directory)
+                else:
+                    ui_behaviours_ok = Event.DONE
+                if config.get("handlers", False):
+                    ui_handlers_ok = yield from self.load_handlers(author, component_name, directory)
+                else:
+                    ui_handlers_ok = Event.DONE
+
+                self.context.logger.info(f"UI setup status: {ui_setup_ok}")
+                self.context.logger.info(f"UI handlers status: {ui_handlers_ok}")
+                self.context.logger.info(f"UI behaviours status: {ui_behaviours_ok}")
+
             payload = SetupPayload(sender=sender, 
-                                   setup_data=ui_setup_ok
+                                   setup_data=Event.Done.value if all([
+                                        ui_setup_ok is Event.DONE,
+                                        ui_behaviours_ok is Event.DONE,
+                                        ui_handlers_ok is Event.DONE]
+                                   ) else Event.ERROR.value
                                    )
         with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
             yield from self.send_a2a_transaction(payload)
@@ -165,10 +193,8 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
 
     # here we load the UI from the custom parameter passed in the setup payload
 
-    def load_ui(self,) -> bool:
+    def load_ui(self,directory) -> bool:
         """Load the UI from the setup_data."""
-        author, component_name = self.params.user_interface_name.split("/")
-        directory = Path("vendor") / author / "customs" / component_name / "build"
         self.context.logger.info(f"Generating routes for the UI in {directory}...")
         self.context.shared_state["routes"] = self.generate_routes(directory)
         self.context.logger.info(f"Routes generated: {len(self.context.shared_state['routes'])} routes.")
@@ -182,13 +208,85 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
         We read the files into memory and store them in the routes dict.
         """
         routes = {}
-        for path in glob(str(Path(directory) / "**" / "*"), recursive=True):
+        for path in glob(str(Path(directory/ "build") / "**" / "*"), recursive=True):
             data = Path(path)
             if data.is_file():
                 route = data.relative_to(str(directory))
                 routes[str(route)] = data.read_bytes()
         return routes
 
+    @property
+    def custom_ui_component(self) -> bool:
+        """Check laod of custom UI component."""
+        author, component_name = self.params.user_interface_name.split("/")
+        directory = Path("vendor") / author / "customs" / component_name 
+        config = yaml.safe_load((directory / "component.yaml").read_text())
+        return author, component_name, directory, config
+
+    
+    def load_behaviours(self, author, component_name, directory) -> bool:
+        """
+        load in the behaviours for the ComponentLoadingRoundBehaviour
+        """
+        import_path = f"packages.{author}.customs.{component_name}.behaviours"
+        behaviour_text =  (directory / "behaviours.py").read_text()
+        exec(behaviour_text)
+        behaviour_name = "LogReadingBehaviour"
+        # we need to ensure we have loaded the dependencies for the behaviours
+        # we can do this by importing the module
+        import sys
+        sys.path += [str(Path(__file__).resolve().parent
+                            .parent
+                            .parent
+                            .parent
+                            .parent
+        / directory.parent)]
+        from trader_ui import behaviours
+
+        behaviour = getattr(behaviours, behaviour_name)
+
+        behaviour(name=behaviour_name,skill_context=self.context)
+
+        def behaviour_runner(name, skill_context, interval = 1):
+            # We need to convert this into a Task to executed by the task runner.
+            behaviour_cls  = getattr(behaviours, name)
+            behaviour = behaviour_cls(name=name, skill_context=skill_context)
+            behaviour.setup()
+            while not behaviour.is_done():
+                behaviour.act()
+                self.context.logger.debug(f"Behaviour {name} running...")
+                time.sleep(interval)
+
+        
+        # as we want have the task runner, we need to run the behaviour in a separate thread
+
+        task = threading.Thread(target=behaviour_runner, args=(behaviour_name, self.context))
+        task.start()
+
+        self.context.logger.info(f"Behaviour {behaviour_name} started.")
+        yield Event.DONE
+
+    def load_handlers(self, author, component_name, directory) -> bool:
+       """
+       load in the handlers for the ComponentLoadingRoundBehaviour
+       """
+
+       handler_name = "PingPongHandler"
+       # we can do this by importing the module
+       import sys
+       sys.path += [str(Path(__file__).resolve().parent
+                           .parent
+                           .parent
+                           .parent
+                           .parent
+       / directory.parent)]
+       from trader_ui import handler as handlers
+
+       handler = getattr(handlers, handler_name)
+       handler = handler(name=handler_name,skill_context=self.context)
+       self.context.user_interface_client_strategy.handlers = [handler]
+
+       yield Event.DONE
 
 
 class ComponentLoadingRoundBehaviour(AbstractRoundBehaviour):

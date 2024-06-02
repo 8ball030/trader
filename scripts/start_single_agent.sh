@@ -8,7 +8,7 @@ aea -s fetch $1 --local --alias agent
 cd agent
 
 # install the agent
-aea -s -v DEBUG install
+# aea -s -v DEBUG install
 
 # create and add a new ethereum key
 aea -s generate-key ethereum && aea -s add-key ethereum

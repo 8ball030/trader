@@ -67,11 +67,16 @@ from packages.eightballer.skills.ui_loader_abci.dialogues import (
 from packages.eightballer.skills.ui_loader_abci.dialogues import (
     UserInterfaceHttpDialogues as BaseUserInterfaceHttpDialogues,
 )
+from packages.eightballer.skills.ui_loader_abci.dialogues import (
+    UserInterfaceWebSocketDialogue as BaseUserInterfaceWebSocketDialogue,
+)
+from packages.eightballer.skills.ui_loader_abci.dialogues import (
+    UserInterfaceWebSocketDialogues as BaseUserInterfaceWebSocketDialogues,
+)
 
 
 AbciDialogue = BaseAbciDialogue
 AbciDialogues = BaseAbciDialogues
-
 
 HttpDialogue = BaseHttpDialogue
 HttpDialogues = BaseHttpDialogues
@@ -79,6 +84,9 @@ HttpDialogues = BaseHttpDialogues
 
 UserInterfaceHttpDialogue = BaseUserInterfaceHttpDialogue
 UserInterfaceHttpDialogues = BaseUserInterfaceHttpDialogues
+
+UserInterfaceWsDialogue = BaseUserInterfaceWebSocketDialogue
+UserInterfaceWsDialogues = BaseUserInterfaceWebSocketDialogues
 
 SigningDialogue = BaseSigningDialogue
 SigningDialogues = BaseSigningDialogues
