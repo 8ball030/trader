@@ -8,10 +8,10 @@ aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeib4t4ay6kfjokq3cydparpzs4zllyl2yujvfsbc24xogwyxsswaqy
   abci_spec.yaml: bafybeig6ffhlqu4w23dwjl7r46hfc63t6vfzr5d7owc2ffcosdrzlfaieu
-  behaviours.py: bafybeih4aqisyumzswctjauodcvql6eia2qsg33zcmdwvjvtgtat6iqsre
-  dialogues.py: bafybeial6fjbtsjuxrokmkuglfi5xemkdv7vrpfukczmxmd3t6rrrwkgcu
-  handlers.py: bafybeihw3klsenoblegnptckikwpeolzcvaioao3r6zyffszbt4cv7222q
-  models.py: bafybeie52pinej25o7cuzligliouzvbxpip6tf6fzgj6kbibk3sr25izxq
+  behaviours.py: bafybeiekcoqj6iomiq26srzmcqzuomrchd5bgqw3c37b3kgkby7zozjbn4
+  dialogues.py: bafybeifdajekrdwyx3cow2vwqpgtdnsgej6ccbrivqj2udv2b3dwhx3wmu
+  handlers.py: bafybeifbtnejuprn33vnh57cwdmm54afobosvo6h4tc2hlyiqdmcoybmvy
+  models.py: bafybeia35miudgmw6ypsfeui2ur6h4j65c2d5tbhm65j6tvwfq4akyfoiy
   payloads.py: bafybeicejrehsaagpwct6bozr7jh73gyx7ewkipk3z7d3khgqejcn5ze6y
   rounds.py: bafybeidzuvf2c2d2gmpte5f3gkbuht6ehk5o4tyxvryjxedzl65kckphrm
   tests/__init__.py: bafybeifigp64li3j3yidpan5arc27etm3jytadjsckjaidrem57hst73ry
@@ -26,7 +26,7 @@ connections: []
 contracts: []
 protocols:
 - eightballer/http:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
-- eightballer/websockets:0.1.0:bafybeibels7dv7ucflaeniwifbisvkegm5vrarrr5ctkcqebg4t7onba6a
+- eightballer/websockets:0.1.0:bafybeigegu5iypibbhpxlvgyv7tfbof6jd7ufbmsxbe4l47wbdu3hop67e
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
 behaviours:
@@ -161,8 +161,6 @@ models:
   tendermint_dialogues:
     args: {}
     class_name: TendermintDialogues
-
-  
 dependencies: {}
 is_abstract: true
 customs: []

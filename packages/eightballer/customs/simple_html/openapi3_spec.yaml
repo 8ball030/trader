@@ -1,0 +1,80 @@
+openapi: 3.0.0
+info:
+  title: Pandora API
+  description: Allows interactions with Autonomous Agents
+  version: 0.1.0
+servers:
+  - url: http://0.0.0.0:5555
+paths:
+  /:
+    get:
+      summary: Returns the main HTML page
+      responses:
+        '200':
+          description: HTML response
+          content:
+            text/html:
+              schema:
+                type: string
+  api/agent-info:
+    get:
+      summary: Returns the agent's state and info
+      responses:
+        '200':
+          description: A Json response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service-id:
+                    type: string
+                  safe-address:
+                    type: string
+                  agent-address:
+                    type: string
+                  agent-status:
+                    type: string
+  api/mech-events:
+    get:
+      summary: Returns the list of mech events and the info for each event
+      responses:
+        '200':
+          description: A Json response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        event_id:
+                          type: string
+                        sender:
+                          type: string
+                        ipfs_hash:
+                          type: string
+                        transaction_hash:
+                          type: string
+                        block_number:
+                          type: integer
+                        block_timestamp:
+                          type: integer
+                        ipfs_link:
+                          type: string
+                        ipfs_contents:
+                          type: object
+                          properties:
+                            prompt:
+                              type: string
+                            tool:
+                              type: string
+                            nonce:
+                              type: string
+                        request_id:
+                          type: string
+                        fee:
+                          type: integer

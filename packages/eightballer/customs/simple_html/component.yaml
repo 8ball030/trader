@@ -1,14 +1,14 @@
-name: trader_ui
-author: tatha
+name: simple_html
+author: eightballer
 version: 0.1.0
 type: custom
-description: Custom UI representing a user interface for the trader skill.
+description: Simple HTML frontend to act as a template for the frontend ABCI loader.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
   __init__.py: bafybeih4oyyzgld4vqtbub6zrcrrfofbhmhbr37rvoxuhzchn3bhhjs7za
   behaviours.py: bafybeicmurqr56pse6hvgs2g4l4x6mthsw5ory23p6s67ant4pqckkvn6q
-  build/index.html: bafybeidtlac2qbn6oohhyyuvbwz36dqxofyiv7s4tsipwbrsl5mnbn65ga
+  build/index.html: bafybeigyjfv75r7fnd7mw63vbidusohzopzyz47c5nmc3tiak5yh22gbfi
   handler.py: bafybeibgcafbdogrm6oezh3izkviwfyzjc7kqapm6cpepmokj734ye5p3a
   openapi3_spec.yaml: bafybeiagdbghwj4t4o7uctojvtkjp7i6zxpwu6dltjsawcaeuteyipftty
 fingerprint_ignore_patterns: []

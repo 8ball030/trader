@@ -40,6 +40,9 @@ class SharedState(BaseSharedState):
 
 class UserInterfaceClientStrategy(Model):
     clients: Dict[str, Any] = {}
+    handlers: list = []
+    behaviours: list = []
+    routes: dict = {}
 
 class UserInterfaceLoaderParams(BaseParams):
     """Keep the current params of the skill."""

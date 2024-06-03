@@ -26,6 +26,7 @@ import threading
 import time
 import yaml
 from typing import Generator, Optional, Set, Type, cast
+import sys
 from importlib import import_module
 
 from packages.valory.skills.abstract_round_abci.base import AbstractRound
@@ -56,8 +57,15 @@ from aea_cli_ipfs.ipfs_utils import DownloadError, IPFSTool
 
 
 from enum import Enum
+import importlib
 
 DEFAULT_FRONTEND_DIR = "frontend"
+
+def dynamic_import(component_name, module_name):
+    module = importlib.import_module(component_name)
+    sub_module = getattr(module, module_name)
+    return sub_module
+
 
 class HttpStatus(Enum):
     OK = 200
@@ -167,11 +175,11 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
                 self.context.logger.info(f"Loading User Interface: {component_name}")
                 ui_setup_ok = yield from self.load_ui(directory)
                 if config.get("behaviours", False):
-                    ui_behaviours_ok = yield from self.load_behaviours(author, component_name, directory)
+                    ui_behaviours_ok = yield from self.load_behaviours(author, component_name, directory, config)
                 else:
                     ui_behaviours_ok = Event.DONE
                 if config.get("handlers", False):
-                    ui_handlers_ok = yield from self.load_handlers(author, component_name, directory)
+                    ui_handlers_ok = yield from self.load_handlers(author, component_name, directory, config)
                 else:
                     ui_handlers_ok = Event.DONE
 
@@ -193,12 +201,19 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
 
     # here we load the UI from the custom parameter passed in the setup payload
 
-    def load_ui(self,directory) -> bool:
+    def load_ui(self, directory) -> bool:
         """Load the UI from the setup_data."""
         self.context.logger.info(f"Generating routes for the UI in {directory}...")
-        self.context.shared_state["routes"] = self.generate_routes(directory)
-        self.context.logger.info(f"Routes generated: {len(self.context.shared_state['routes'])} routes.")
-        if not self.context.shared_state["routes"]:
+        self.strategy.routes = self.generate_routes(directory)
+        self.context.logger.info(f"Routes generated: {len(self.strategy.routes)} routes.")
+        sys.path += [str(Path(__file__).resolve().parent
+                            .parent
+                            .parent
+                            .parent
+                            .parent
+        / directory.parent)]
+        self.context.logger.info(f"Added {directory} to the path.")
+        if not self.strategy.routes:
             return Event.ERROR
         yield Event.DONE
 
@@ -211,7 +226,7 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
         for path in glob(str(Path(directory/ "build") / "**" / "*"), recursive=True):
             data = Path(path)
             if data.is_file():
-                route = data.relative_to(str(directory))
+                route = data.relative_to(str(directory / "build"))
                 routes[str(route)] = data.read_bytes()
         return routes
 
@@ -224,69 +239,49 @@ class SetupBehaviour(ComponentLoadingBaseBehaviour):
         return author, component_name, directory, config
 
     
-    def load_behaviours(self, author, component_name, directory) -> bool:
+    def load_behaviours(self, author, component_name, directory, config) -> bool:
         """
         load in the behaviours for the ComponentLoadingRoundBehaviour
         """
-        import_path = f"packages.{author}.customs.{component_name}.behaviours"
-        behaviour_text =  (directory / "behaviours.py").read_text()
-        exec(behaviour_text)
-        behaviour_name = "LogReadingBehaviour"
-        # we need to ensure we have loaded the dependencies for the behaviours
-        # we can do this by importing the module
-        import sys
-        sys.path += [str(Path(__file__).resolve().parent
-                            .parent
-                            .parent
-                            .parent
-                            .parent
-        / directory.parent)]
-        from trader_ui import behaviours
-
-        behaviour = getattr(behaviours, behaviour_name)
-
-        behaviour(name=behaviour_name,skill_context=self.context)
-
-        def behaviour_runner(name, skill_context, interval = 1):
+        def behaviour_runner(behaviour, interval = 1):
             # We need to convert this into a Task to executed by the task runner.
-            behaviour_cls  = getattr(behaviours, name)
-            behaviour = behaviour_cls(name=name, skill_context=skill_context)
             behaviour.setup()
-            while not behaviour.is_done():
+            while True:
                 behaviour.act()
-                self.context.logger.debug(f"Behaviour {name} running...")
+                self.context.logger.debug(f"Behaviour {behaviour} running...")
                 time.sleep(interval)
 
+        configs = config['behaviours']
+        module = dynamic_import(component_name, "behaviours")
         
-        # as we want have the task runner, we need to run the behaviour in a separate thread
-
-        task = threading.Thread(target=behaviour_runner, args=(behaviour_name, self.context))
-        task.start()
-
-        self.context.logger.info(f"Behaviour {behaviour_name} started.")
+        for behaviour_config in configs:
+            class_name = behaviour_config["class_name"]
+            kwargs = behaviour_config.get("kwargs", {})
+            behaviour = getattr(module, class_name)
+            behaviour = behaviour(name=class_name,skill_context=self.context, **kwargs)
+            self.context.user_interface_client_strategy.behaviours.append(behaviour)
+            task = threading.Thread(target=behaviour_runner, args=(behaviour,))
+            task.start()
+            self.context.logger.info(f"Behaviour {class_name} loaded and running.")
+        self.context.logger.info(f"Behaviour {behaviour} started.")
         yield Event.DONE
 
-    def load_handlers(self, author, component_name, directory) -> bool:
-       """
-       load in the handlers for the ComponentLoadingRoundBehaviour
-       """
+    def load_handlers(self, author, component_name, directory, config) -> bool:
+        """
+        load in the handlers for the ComponentLoadingRoundBehaviour
+        """
 
-       handler_name = "PingPongHandler"
-       # we can do this by importing the module
-       import sys
-       sys.path += [str(Path(__file__).resolve().parent
-                           .parent
-                           .parent
-                           .parent
-                           .parent
-       / directory.parent)]
-       from trader_ui import handler as handlers
-
-       handler = getattr(handlers, handler_name)
-       handler = handler(name=handler_name,skill_context=self.context)
-       self.context.user_interface_client_strategy.handlers = [handler]
-
-       yield Event.DONE
+        configs = config['handlers']
+        module = dynamic_import(component_name, "handlers")
+        
+        for handler_config in configs:
+            class_name = handler_config["class_name"]
+            handler_kwargs = handler_config.get("kwargs", {})
+            handler = getattr(module, class_name)
+            handler = handler(name=class_name,skill_context=self.context, **handler_kwargs)
+            self.context.user_interface_client_strategy.handlers.append(handler)
+            self.context.logger.info(f"Handler {class_name} loaded.")
+        yield Event.DONE
 
 
 class ComponentLoadingRoundBehaviour(AbstractRoundBehaviour):

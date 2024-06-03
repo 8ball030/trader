@@ -1,0 +1,37 @@
+name: simple_react
+author: eightballer
+version: 0.1.0
+type: custom
+description: A simple react frontend to act as a template for the frontend ABCI loader.
+license: Apache-2.0
+aea_version: '>=1.0.0, <2.0.0'
+fingerprint:
+  __init__.py: bafybeih4oyyzgld4vqtbub6zrcrrfofbhmhbr37rvoxuhzchn3bhhjs7za
+  behaviours.py: bafybeicmurqr56pse6hvgs2g4l4x6mthsw5ory23p6s67ant4pqckkvn6q
+  build/asset-manifest.json: bafybeidfewzdb3zrkhmfcflbdl6dbfasxim7vz5yb6xxwkeimxyd47strq
+  build/favicon.ico: bafybeigoxdaiyjbhlh3hq7b5myaowqlc22poxirhfjqzesxk4erea2e3pu
+  build/index.html: bafybeifps76xmtirdxpxhydcgpo7bxiwyrhy4wkziuiduunygun3hwgloq
+  build/logo192.png: bafybeidhlw4klw7orymxbyesv4pr7gahsqzqmy2y52afhf4b4siski5m64
+  build/logo512.png: bafybeiapouuafho4dwynkjesqfanw3trtnekelmfjttmzcnlmwfqz2hnsm
+  build/manifest.json: bafybeihpg7mfkdf7xm3pw3ge36ygmktdmdheh65l6rwcz4n3mmha27yj2a
+  build/robots.txt: bafybeifmudop7z45oyjc7jimzav6aqogvpwkobbtscdwidtpuovh6yp5wu
+  build/static/css/main.e6c13ad2.css: bafybeihaedfwyzl5w7xh7zd5mgn7x3whbl3no3hjv4wzzrf4phhi4lgomy
+  build/static/css/main.e6c13ad2.css.map: bafybeibgrqz6gwp4tivzyzw6r6dvm3ebmajkq7dwsek6ful36gj7afbisy
+  build/static/js/453.e68fcaf1.chunk.js: bafybeiczwce5mi4iwrc7j5u22plj7zgry7iljiuoty76tkb6u5mo2qg4pa
+  build/static/js/453.e68fcaf1.chunk.js.map: bafybeifufhiqphwah5ay3e4yg4eav2x5lw33ayy67k3mqcen2x5maluiei
+  build/static/js/main.f6b3d703.js: bafybeihr5yqltgkv6jyzxmhy2vhcwgkewzradg55ls7hil5iq2rzrqdl7y
+  build/static/js/main.f6b3d703.js.LICENSE.txt: bafybeibtpp7lwmzwjzxtse7kfiarsdodgx3ljsudh6g7y2ud6som2strxe
+  build/static/js/main.f6b3d703.js.map: bafybeigpaj32emrammo3k63yktrmqxzmpukfbuuwkqgr6slnywvichcqra
+  handler.py: bafybeibgcafbdogrm6oezh3izkviwfyzjc7kqapm6cpepmokj734ye5p3a
+  openapi3_spec.yaml: bafybeiagdbghwj4t4o7uctojvtkjp7i6zxpwu6dltjsawcaeuteyipftty
+  readme.md: bafybeihztrfmxw7fhwfvfcjqnxiohctber6hdb7jopumb3mcmfpdzypdv4
+fingerprint_ignore_patterns: []
+dependencies: {}
+api_spec: open_api3_spec.yaml
+frontend_dir: build
+behaviours:
+- class_name: LogReadingBehaviour
+  args: {}
+handlers:
+- class_name: PingPongHandler
+  args: {}
