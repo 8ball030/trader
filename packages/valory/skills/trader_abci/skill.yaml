@@ -19,7 +19,7 @@ connections: []
 contracts: []
 protocols: []
 skills:
-- eightballer/ui_loader_abci:0.1.0:bafybeihqrojreiiwizvxqoqhbawxuqbyhaamciz3p7teqkpvptusglfz4i
+- eightballer/ui_loader_abci:0.1.0:bafybeif4fqitlkmzbjzciacgnl33bbxhiu2sb32yt2b6srrqn5urt3y7n4
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
