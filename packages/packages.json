@@ -25,8 +25,9 @@
         "skill/eightballer/ui_loader_abci/0.1.0": "bafybeiattbk2pwmqlmmrqkcrnwagzqzsbltcoc36pwfzkfrhp53v7cjrqe",
         "skill/eightballer/ui_loader/0.1.0": "bafybeie67653iilvgtsmbmhlxs2kvept2ypyqcgilqzh4e5lizxeob7whe",
         "agent/valory/trader/0.1.0": "bafybeie2wkerz7yhrpzrrhfpa2prqz6555ubxdxguozirxgsznu2eq6k6e",
-        "agent/eightballer/trader/0.1.0": "bafybeihdcsff4be76wuo6krqlxqyztnp6eeo646pxe266okgveh33imvci",
-        "service/valory/trader/0.1.0": "bafybeihc7bjykxo3y7i6mgf76y4qhrjbzozfv53xaalsborscbcbgqmwwm"
+        "agent/eightballer/trader/0.1.0": "bafybeibrisleqqy36zdhw5x54pww7xohmove6g7tiune5ajnjga2qc7eqm",
+        "service/valory/trader/0.1.0": "bafybeihc7bjykxo3y7i6mgf76y4qhrjbzozfv53xaalsborscbcbgqmwwm",
+        "service/eightballer/trader/0.1.0": "bafybeiccuhp77iwnehystj2nmrdq66viiya2fgmlcdqp747f23tmojijzm"
     },
     "third_party": {
         "protocol/open_aea/signing/1.0.0": "bafybeihv62fim3wl2bayavfcg3u5e5cxu3b7brtu4cn5xoxd6lqwachasi",

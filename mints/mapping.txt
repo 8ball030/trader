@@ -96,10 +96,10 @@ token_id-"component_id"
 # agents
 24-agent/eightballer/collateralisation_station/0.1.0
 31-agent/eightballer/notification_agent:0.1.0
+33-agent/eightballer/trader:0.1.0
 # services
 20-service/eightballer/collateralisation_station/0.1.0
 24-service/eightballer/notification_station/0.1.0
-
 198-protocol/eightballer/user_interaction:0.1.0
 200-connection/eightballer/apprise:0.1.0
 202-skill/eightballer/balance_checker:0.1.0
@@ -136,7 +136,13 @@ token_id-"component_id"
 
 8895-custom/valory/mike_strat/0.1.0
 8895-custom/w1kke/always_blue/0.1.0
+8895-custom/tatha/trader_ui/0.1.0
 
 9990-skill/valory/staking_abci
 9990-skill/valory/check_stop_trading_abci
 9990-skill/valory/mech_interact_abci
+
+## PENDING
+9991-skill/tatha/
+
+

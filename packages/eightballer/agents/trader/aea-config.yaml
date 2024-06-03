@@ -4,8 +4,10 @@ version: 0.1.0
 license: Apache-2.0
 description: Trader agent. Forked from Valory with the help of Tatha.eth. Enables
   augmentation of the trading agent using a meta-framework for the creation of custom_components
-  to repersent user interfaces for the owners of the agent to connect to a self-hosted
-  web server.
+  to represent user interfaces for the owners of the agent to connect to a self-hosted
+  web server. The addition of this abci broadly the ecosystem by allowing developers
+  of languages such HTML, CSS, and JavaScript to partake in the OLAS ecosystem. Includes
+  a template for HTML, and React custom components.
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint: {}
 fingerprint_ignore_patterns: []
