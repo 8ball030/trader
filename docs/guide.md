@@ -20,6 +20,17 @@ The ABCI frontend loader is designed to not interfer with agent development and 
 
 The frontend components are defined as `custom_components` and are loaded by the frontend loader.
 
+I have implemented 2 examples for first principles approaches.
+
+The first is a very simple HTML compoenent is avaialble at `[eightballer/simple_html]`(../packages/eightballer/customs/simple_html) component.
+
+The second is ss a very simple React app bundled with bun avaialble at [eightballer/simple_react](../packages/eightballer/customs/simple_react) component.
+
+The `simple_react_app` implements ping pong reponses via websockets and btoh frontends stream the output from the agent in less than 100 lines of code.
+
+![image](https://github.com/8ball030/trader/assets/35799987/7c941296-4f97-49d1-943b-fe20da777b47)
+
+
 Please see [Tatha's Trader UI](../packages/tatha/customs/trader_ui)
 Additionally, a simple example of a frontend component is the [eightballer/logging](../packages/eightballer/customs/logging) component.
 
