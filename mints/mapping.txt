@@ -116,4 +116,4 @@ token_id-"component_id"
 
 212-protocol/eightballer/websockets/0.1.0
 213-connection/eightballer/websocket_server:0.1.0
-216-eightballer/ui_loader_abci:0.1.0
+216-skill/eightballer/ui_loader_abci:0.1.0
