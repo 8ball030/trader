@@ -54,3 +54,4 @@ trader/
 !/packages/eightballer/agents/trader/
 !/packages/valory/services/trader/
 /trader_service/
+/service/
