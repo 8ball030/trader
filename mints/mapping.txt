@@ -123,3 +123,20 @@ token_id-"component_id"
 217-custom/eightballer/simple_html/0.1.0
 218-custom/eightballer/simple_react/0.1.0
 
+
+# UNKNOWN
+8894-contract/valory/realitio/0.1.0
+
+8888-contract/valory/conditional_tokens/0.1.0
+8889-contract/valory/realitio/0.1.0
+8890-contract/valory/realitio_proxy/0.1.0
+8891-contract/valory/agent_registry/0.1.0
+8892-contract/valory/service_staking_token/0.1.0
+8893-contract/valory/transfer_nft_condition/0.1.0
+
+8895-custom/valory/mike_strat/0.1.0
+8895-custom/w1kke/always_blue/0.1.0
+
+9990-skill/valory/staking_abci
+9990-skill/valory/check_stop_trading_abci
+9990-skill/valory/mech_interact_abci
