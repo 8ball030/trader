@@ -50,11 +50,11 @@ Additionally, a simple example of a frontend component is the [eightballer/loggi
 - Background tasks specified and launched by the loader (An anology would be background tasks in a Flask app.)
 
 
-- Examples of frontends in multiple languages.
--- React
--- [HTML](../packages/eightballer/customs/simple_html)
--- [Svelte](../packages/eightballer/customs/logging)
+- Template examples of frontends in multiple languages.
 
+  - [HTML](../packages/eightballer/customs/simple_html)
+  - [React](../packages/eightballer/customs/simple_react)
+  
 
 - Independant Protocols and servers for the frontend components meaning no interaction with core skills.
 
