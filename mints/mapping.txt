@@ -1,24 +1,4 @@
 token_id-"component_id"
-107-"contract/valory/mech/0.1.0"
-108-"contract/valory/erc20/0.1.0"
-109-"contract/valory/market_maker/0.1.0"
-110-"skill/valory/market_manager_abci/0.1.0"
-111-"skill/valory/decision_maker_abci/0.1.0"
-112-"skill/valory/tx_settlement_multiplexer_abci/0.1.0"
-113-"skill/valory/trader_abci/0.1.0"
-166-"custom/valory/bet_amount_per_threshold/0.1.0"
-167-"custom/jhehemann/kelly_criterion/0.1.0"
----
-token_id-"agent_id"
-14-"agent/valory/trader/0.1.0"
-25-"agent/valory/trader/0.1.0"
----
-token_id-"service_id" (Gnosis)
-10-"service/valory/trader/0.1.0"
-token_id-"service_id" (Ethereum)
-10-"service/valory/trader/0.1.0"
----
-token_id-"component_id"
 # deps
 1-"protocol/valory/abci/0.1.0"
 2-"protocol/valory/acn/1.1.0"
@@ -40,9 +20,38 @@ token_id-"component_id"
 19-"contract/valory/gnosis_safe/0.1.0"
 20-"contract/valory/multisend/0.1.0"
 22-"skill/valory/transaction_settlement_abci/0.1.0"
+33-"skill/valory/termination_abci/0.1.0"
 39-"protocol/valory/ipfs/0.1.0"
 50-"connection/valory/ipfs/0.1.0"
 51-"contract/valory/multicall2/0.1.0"
+78-"protocol/valory/default/1.0.0"
+79-"protocol/valory/acn_data_share/0.1.0"
+80-"connection/valory/websocket_client/0.1.0"
+81-"contract/valory/agent_mech/0.1.0"
+82-"skill/valory/contract_subscription/0.1.0"
+83-"skill/valory/multiplexer_abci/0.1.0"
+84-"skill/valory/task_execution_abci/0.1.0"
+85-"skill/valory/mech_abci/0.1.0"
+166-"custom/valory/bet_amount_per_threshold/0.1.0"
+167-"custom/jhehemann/kelly_criterion/0.1.0"
+168-"custom/valory/openai_request/0.1.0"
+169-"custom/psouranis/optimization_by_prompting/0.1.0"
+170-"custom/valory/prediction_request/0.1.0"
+171-"custom/valory/prediction_request_claude/0.1.0"
+172-"custom/valory/prediction_request_embedding/0.1.0"
+173-"custom/nickcom007/prediction_request_sme/0.1.0"
+174-"custom/jhehemann/prediction_sum_url_content/0.1.0"
+175-"custom/nickcom007/sme_generation_request/0.1.0"
+176-"custom/valory/stability_ai_request/0.1.0"
+181-"custom/polywrap/prediction_with_research_report/0.1.0"
+186-"custom/valory/resolve_market/0.1.0"
+107-"contract/valory/mech/0.1.0"
+108-"contract/valory/erc20/0.1.0"
+109-"contract/valory/market_maker/0.1.0"
+110-"skill/valory/market_manager_abci/0.1.0"
+111-"skill/valory/decision_maker_abci/0.1.0"
+112-"skill/valory/tx_settlement_multiplexer_abci/0.1.0"
+113-"skill/valory/trader_abci/0.1.0"
 116-skill/eightballer/attestation_client/0.1.0
 121-contract/zarathustra/homm_vault/0.1.0
 122-contract/valory/uniswap_v2_erc20/0.1.0
@@ -71,9 +80,32 @@ token_id-"component_id"
 155-contract/eightballer/pwn_simple_loan/0.1.0
 163-skill/eightballer/collateralisation_station_abci/0.1.0
 164-skill/eightballer/chained_collateralisation/0.1.0
+64-"contract/valory/dynamic_contribution/0.1.0"
+65-"skill/valory/ceramic_read_abci/0.1.0"
+66-"skill/valory/ceramic_write_abci/0.1.0"
+67-"skill/valory/dynamic_nft_abci/0.1.0"
+68-"skill/valory/generic_scoring_abci/0.1.0"
+69-"skill/valory/path_switch_abci/0.1.0"
+70-"skill/valory/twitter_scoring_abci/0.1.0"
+71-"skill/valory/impact_evaluator_abci/0.1.0"
+191-"protocol/valory/twitter/0.1.0"
+192-"protocol/valory/srr/0.1.0"
+193-"connection/valory/twitter/0.1.0"
+194-"connection/valory/farcaster/0.1.0"
+
+# agents
+24-agent/eightballer/collateralisation_station/0.1.0
+31-agent/eightballer/notification_agent:0.1.0
+# services
+20-service/eightballer/collateralisation_station/0.1.0
+24-service/eightballer/notification_station/0.1.0
+
 198-protocol/eightballer/user_interaction:0.1.0
 200-connection/eightballer/apprise:0.1.0
 202-skill/eightballer/balance_checker:0.1.0
+# pending
+
+
 203-protocol/eightballer/balances:0.1.0
 204-protocol/eightballer/markets:0.1.0
 205-protocol/eightballer/ohlcv:0.1.0
@@ -82,4 +114,6 @@ token_id-"component_id"
 208-protocol/eightballer/spot_asset:0.1.0
 209-protocol/eightballer/tickers:0.1.0
 
-?-agent/eightballer/trader/0.1.0
+212-protocol/eightballer/websockets/0.1.0
+213-connection/eightballer/websocket_server:0.1.0
+216-eightballer/ui_loader_abci:0.1.0
