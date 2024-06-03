@@ -33,7 +33,7 @@ The `simple_react_app` implements ping pong reponses via websockets and btoh fro
 
 This Has been built in order to allow developers such as 
 
-Please see [Tatha's Trader UI](../packages/tatha/customs/trader_ui) for a much more developed iteration of the application.
+Please see [Tatha's Trader UI](../packages/tatha/customs/trader_ui) for a much more developed iteration of the principles applied to a frontend to serve the data for the purpose of the prediction agent.
 
 
 Additionally, a simple example of a frontend component is the [eightballer/logging](../packages/eightballer/customs/logging) component.
