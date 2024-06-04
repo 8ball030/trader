@@ -2,7 +2,10 @@ name: ui_loader_abci
 author: eightballer
 version: 0.1.0
 type: skill
-description: The scaffold skill is a scaffold for your own skill implementation.
+description: The UI Loader ABCI skill is responsible for loading the UI components
+  from from the custom components and then serving them to the user interface. The
+  skill enables bidirectional communication between the user interface and the ABCI
+  application through the use of websockets and http connections.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
