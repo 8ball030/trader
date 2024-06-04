@@ -16,7 +16,7 @@ echo "Starting service $1"
 # if the key path is not set, we hard exit
 if [ -z "$MAS_KEYPATH" ]; then
     echo "MAS_KEYPATH is not set!"
-    exit 1
+    export MAS_KEYPATH="../keys.json"
 fi
 
 echo "-----------------------------"
